@@ -1,3 +1,6 @@
+
+SOLADA_BIN=$(dir $(shell which llvm-config))/gnat
+
 GPRBUILD=gprbuild -v -n
 
 # number of processors
@@ -61,6 +64,10 @@ LOCAL_RT_FILES=../link.c s-pehage.adb s-pehage.ads s-rident.ads s-utf_32.adb \
 GEN_IL_FILES = nmake.adb nmake.ads \
   seinfo.ads sinfo-nodes.ads sinfo-nodes.adb \
   einfo-entities.ads einfo-entities.adb
+
+install:
+	mkdir -p $(SOLADA_BIN)
+	cp -rp bin/* $(SOLADA_BIN)
 
 setup:
 	$(MKDIR) obj obj-tools/libgnat bin gnat_src/vast

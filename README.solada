@@ -1,13 +1,19 @@
 
+===================== BUILD & INSTALL
 
-Update llvm-interface/Makefile to set the LLVM version to be used
+export LD_LIBRARY_PATH=/opt/solana/gnat-fsf-12/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/opt/ada/gnat-fsf-12_12.1.2/lib64:$LD_LIBRARY_PATH
+export PATH=/opt/solana/gnat-fsf-12/bin:$PATH
+. /opt/env-fsf-12sh
 
-    17	ifneq ($(wildcard $(pwd)/../llvm/llvm-obj/bin/llvm-config),)
-    18	  LLVM_CONFIG=$(pwd)/../llvm/llvm-obj/bin/llvm-config
-    19	else
-    20	  LLVM_CONFIG=llvm-config-15
-    21	endif
+git clone https://github.com/AdaLabs/gnat-llvm.git
+cd gnat-llvm
+git checkout -b master-adalabs-solada origin/master-adalabs-solada
+git clone git://gcc.gnu.org/git/gcc.git llvm-interface/gcc
+ln -s gcc/gcc/ada llvm-interface/gnat_src
 
+make
+make -C llvm-interface install
 
 ===================== LLVM-15
 
