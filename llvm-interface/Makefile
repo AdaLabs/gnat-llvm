@@ -24,7 +24,7 @@ pwd:=$(shell pwd)
 ifneq ($(wildcard $(pwd)/../llvm/llvm-obj/bin/llvm-config),)
   LLVM_CONFIG=$(pwd)/../llvm/llvm-obj/bin/llvm-config
 else
-  LLVM_CONFIG=llvm-config-15
+  LLVM_CONFIG=llvm-config
 endif
 
 LDFLAGS=$(shell $(LLVM_CONFIG) --libs all --ldflags --system-libs)
