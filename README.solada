@@ -1,0 +1,18 @@
+
+
+Update llvm-interface/Makefile to set the LLVM version to be used
+
+    17	ifneq ($(wildcard $(pwd)/../llvm/llvm-obj/bin/llvm-config),)
+    18	  LLVM_CONFIG=$(pwd)/../llvm/llvm-obj/bin/llvm-config
+    19	else
+    20	  LLVM_CONFIG=llvm-config-15
+    21	endif
+
+
+===================== LLVM-15
+
+initial llvm-interface/gcc/ commit to be set to d9d8c9674ad3ad3aa38419d24b1aaaffe31f5d3f
+
+===================== LLVM-??
+
+llvm-interface/gcc/ commit to be set to 609e8c492d62d92465460eae3d43dfc4b2c68288
