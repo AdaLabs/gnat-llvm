@@ -8,7 +8,7 @@ export PATH=/opt/solana/gnat-fsf-12/bin:$PATH
 
 git clone https://github.com/AdaLabs/gnat-llvm.git
 cd gnat-llvm
-git checkout -b master-adalabs-solada origin/master-adalabs-solada
+git checkout -b master-solada origin/master-solada
 git clone git://gcc.gnu.org/git/gcc.git llvm-interface/gcc
 ln -s gcc/gcc/ada llvm-interface/gnat_src
 
