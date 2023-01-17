@@ -1,0 +1,11 @@
+GNAT-LLVM 14
+============
+  Selected LLVM 14 version is the last commit before LLVM 15 integration, which is 63e7d1e00a5ad113ffa98472dcfc1c1cd553402f
+
+  Branch created with 
+     $ git checkout -b master-solada-llvm14 63e7d1e00a5ad113ffa98472dcfc1c1cd553402f
+
+  llvm-interface/gcc commit is d9d8c9674ad3ad3aa38419d24b1aaaffe31f5d3f (was the latest at the time the repo was cloned)
+
+
+

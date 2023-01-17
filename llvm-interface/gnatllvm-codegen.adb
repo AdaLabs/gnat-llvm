@@ -364,34 +364,56 @@ package body GNATLLVM.Codegen is
    ----------------------------
 
    procedure Initialize_LLVM_Target is
-      Num_Builtin : constant := 3;
+      Num_Builtin : Interfaces.C.int;
 
       type    Addr_Arr     is array (Interfaces.C.int range <>) of Address;
-      subtype Switch_Addrs is Addr_Arr (1 .. Switches.Last + Num_Builtin);
+
       Opt0        : constant String   := "filename" & ASCII.NUL;
       Opt1        : constant String   := "-enable-shrink-wrap=0" & ASCII.NUL;
       Opt2        : constant String   :=
         "-generate-arange-section" & ASCII.NUL;
-      Addrs       : Switch_Addrs      :=
-        (1 => Opt0'Address, 2 => Opt1'Address, 3 => Opt2'Address,
-         others => <>);
+
       Ptr_Err_Msg : aliased Ptr_Err_Msg_Type;
       TT_First    : constant Integer  := Target_Triple'First;
 
    begin
+      if Target_Triple'Length >= 3 and then
+        Target_Triple (TT_First .. TT_First + 2) = "bpf"
+      then
+         Num_Builtin := 1;
+      else
+         Num_Builtin := 3;
+      end if;
+
       if Long_Long_Long_Size > 64 then
          Early_Error ("Long_Long_Long_Size greater than 64 not supported");
       end if;
 
-      --  Add any LLVM parameters to the list of switches
+      declare
+         subtype Switch_Addrs is Addr_Arr (1 .. Switches.Last + Num_Builtin);
+         Addrs : Switch_Addrs;
+      begin
+         if Target_Triple'Length >= 3 and then
+           Target_Triple (TT_First .. TT_First + 2) = "bpf"
+         then
+            Addrs := (1      => Opt0'Address,
+                      others => <>);
+         else
+            Addrs := (1      => Opt0'Address,
+                      2      => Opt1'Address,
+                      3      => Opt2'Address,
+                      others => <>);
+         end if;
 
-      for J in 1 .. Switches.Last loop
-         Addrs (J + Num_Builtin) := Switches.Table (J).all'Address;
-      end loop;
+         --  Add any LLVM parameters to the list of switches
 
-      Parse_Command_Line_Options (Switches.Last + Num_Builtin,
-                                  Addrs'Address, "");
+         for J in 1 .. Switches.Last loop
+            Addrs (J + Num_Builtin) := Switches.Table (J).all'Address;
+         end loop;
 
+         Parse_Command_Line_Options (Switches.Last + Num_Builtin,
+                                     Addrs'Address, "");
+      end;
       --  Finalize our compilation mode now that all switches are parsed
 
       if Emit_LLVM then
@@ -446,7 +468,13 @@ package body GNATLLVM.Codegen is
 
       --  ??? Replace this by a parameter in system.ads or target.atp
 
-      if Target_Triple (TT_First .. TT_First + 3) = "wasm" then
+      if Target_Triple'Length >= 4 and then
+      Target_Triple (TT_First .. TT_First + 3) = "wasm"
+      then
+         Force_Activation_Record_Parameter := True;
+      elsif Target_Triple'Length >= 3 and then
+      Target_Triple (TT_First .. TT_First + 2) = "bpf"
+      then
          Force_Activation_Record_Parameter := True;
       end if;
    end Initialize_LLVM_Target;
