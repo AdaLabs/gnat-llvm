@@ -27,6 +27,15 @@ automated:
 cross-automated:
 	$(MAKE) -C llvm-interface zfp-opt
 
+DESTDIR?=$(dir $(shell which llvm-config))
+
+solada:
+	$(MAKE) -C llvm-interface build
+
+solada-install:
+	mkdir -p $(DESTDIR)
+	cp -rp llvm-interface/bin/* $(DESTDIR)
+
 llvm:
 	$(MAKE) -j1 -C llvm setup
 	$(MAKE) -C llvm llvm
